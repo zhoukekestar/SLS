@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<meta charset='utf8'>
+<head>
+  <style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+
+  table td,
+  table th {
+    text-align: left;
+    border: solid 1px #ccc;
+    padding: 3px;
+  }
+  </style>
+</head>
+
+<body>
+  <form action='/MongoDB/search' data-role='formJSON'>
+    <label>
+      项目
+      <select name="project">
+        <option value="admin.toomao.com">运营管理</option>
+        <option value="m.toomao.com">手机版</option>
+        <option value="www.toomao.com">商家管理</option>
+      </select>
+    </label>
+    <label>
+      日志等级
+      <select name="level">
+        <option value="ALL">ALL</option>
+        <option value="DEBUG">DEBUG</option>
+        <option value="INFO">INFO</option>
+        <option value="WARN">WARN</option>
+        <option value="ERROR">ERROR</option>
+      </select>
+    </label>
+    <label>
+      类名
+      <input class="" name="name" value="ALL" list='name-list'>
+      <datalist id='name-list'>
+        <option value='ALL'>
+      </datalist>
+    </label>
+    <label>
+      内容
+      <input class="" name="msg" value="ALL" list='msg-list'>
+      <datalist id='msg-list'>
+        <option value='ALL'>
+      </datalist>
+    </label>
+    <label>
+      开始时间
+      <input type='date' name="startD" value="">
+      <input type='time' name='startT' value="">
+    </label>
+    <label>
+      结束时间
+      <input type='date' name="endD" value="">
+      <input type='time' name='endT' value="">
+    </label>
+    <button>搜索</button>
+  </form>
+  <div id='result'>
+  </div>
+  <script type='text/html' id='tmpl' data-role='template' data-holder='#result'>
+    <table>
+      <thead>
+        <tr>
+          <th>level</th>
+          <th>name</th>
+          <th>msg</th>
+          <th style="width: 85px;">time</th>
+        </tr>
+        <thead>
+          <tbody>
+            <% results.forEach(function(item) { %>
+              <tr>
+                <td>
+                  <%=item.level%>
+                </td>
+                <td>
+                  <%=item.name%>
+                </td>
+                <td>
+                  <%=item.msg%>
+                </td>
+                <td>
+                  <%=format(item._time)%>
+                </td>
+              </tr>
+              <% }) %>
+          </tbody>
+    </table>
+  </script>
+  <script src='./formJSON.js'></script>
+  <script src='./template.js'></script>
+  <script>
+  window.format = function(d) {
+    d = new Date(d);
+    return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + " " +
+      d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+  }
+
+  document.querySelector('form').onended = function(d) {
+    document.querySelector("#tmpl")._updateBy(d);
+  }
+  </script>
+</body>
+
+</html>

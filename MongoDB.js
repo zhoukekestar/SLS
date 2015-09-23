@@ -2,8 +2,9 @@ var _M = require('mongodb');
 var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require("mongodb").ObjectID;
 
-var url = "mongodb://toomao:toomaologs@10.160.30.221:27019/logs?authSource=admin";
-//var url = "mongodb://sa:sa123@192.168.0.199:27017/logs?authSource=admin";
+// var url = "mongodb://toomao:toomaologs@10.160.30.221:27019/logs?authSource=admin";
+var url = "mongodb://localhost:27017/nodejs";
+
 var mongoDB;
 MongoClient.connect(url, function(err, db){
 	if (err)
@@ -13,7 +14,7 @@ MongoClient.connect(url, function(err, db){
 });
 
 var operate = {
-	getDB: function(){
+	getDB: function() {
 		return mongoDB;
 	},
 	select: function(name, find, callback){
@@ -27,7 +28,7 @@ var operate = {
 		});
 	},
 	selectByID: function(name, id, callback){
-		
+
 		var col = mongoDB.collection(name);
 		col.find({"_id": ObjectID(id)}).toArray(function(err, docs){
 			callback(err, docs);
