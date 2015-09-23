@@ -3,6 +3,15 @@ var path        = require('path');
 var app         = express();
 var mongo       = require('./MongoDB.js');
 var bodyParser  = require('body-parser');
+var crypto      = require('crypto');
+var signCode    = 'abc.123';
+
+
+var md5 = function(str){
+  var md5 = crypto.createHash('md5');
+  md5.update(str);
+  return md5.digest('hex');
+}
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -16,11 +25,11 @@ app.get("/", function(req, res){
 app.post('/MongoDB/search', function(req, res) {
 
   var project = req.body.project;
-  var name = req.body.name;
-  var msg = req.body.msg;
-  var level = req.body.level;
-  var start = new Date(req.body.startD + ' ' + req.body.startT)
-  var end = new Date(req.body.endD + ' ' + req.body.endT)
+  var name    = req.body.name;
+  var msg     = req.body.msg;
+  var level   = req.body.level;
+  var start   = new Date(req.body.startD + ' ' + req.body.startT)
+  var end     = new Date(req.body.endD + ' ' + req.body.endT)
 
   var opt = {
     project: project,
@@ -34,11 +43,11 @@ app.post('/MongoDB/search', function(req, res) {
   }
 
   level === 'ALL' && (delete opt.level);
-  name === 'ALL' && (delete opt.name);
-  msg === 'ALL' && (delete opt.msg);
+  name  === 'ALL' && (delete opt.name);
+  msg   === 'ALL' && (delete opt.msg);
 
   isNaN(start.getTime()) && (delete opt._time['$gt'])
-  isNaN(end.getTime()) && (delete opt._time['$lt'])
+  isNaN(end.getTime())   && (delete opt._time['$lt'])
 
   isNaN(start.getTime()) && isNaN(end.getTime()) && (delete opt._time)
 
@@ -48,7 +57,7 @@ app.post('/MongoDB/search', function(req, res) {
       _time: -1
     }
   }
-  console.log(opt)
+
   mongo.select('logs', opt, function(err, docs) {
     res.json({results: docs});
   })
@@ -57,10 +66,28 @@ app.post('/MongoDB/search', function(req, res) {
 
 // Add log
 app.post('/MongoDB/logs', function(req, res){
-  try{
+  try {
+
+    var now   = new Date().getTime();
+    var t     = req.headers['x-time']
+    var sign  = req.headers['x-sign'];
+
+    if (now - t > 10000) {
+      return res.json({err: 'Timeout'})
+    }
+
+    if (!t || !sign) {
+      return res.json({err: 'NoHeader'});
+    }
+
+    if (md5(signCode + t) !== sign) {
+      return res.json({err: "SignError"})
+    }
+
     mongo.insert('logs', req.body, function(err, id, result){
-      res.jsonp({"id": id});
+      res.json({id: id});
     });
+
   } catch (e) {
     res.send(e);
   }
