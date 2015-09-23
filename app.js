@@ -4,7 +4,7 @@ var app         = express();
 var mongo       = require('./MongoDB.js');
 var bodyParser  = require('body-parser');
 var crypto      = require('crypto');
-var signCode    = 'abc.123';
+var signCode    = 'your-sign-code';
 
 
 var md5 = function(str){
@@ -132,3 +132,4 @@ app.post('/MongoDB/logs', function(req, res){
 // });
 
 app.listen(3000);
+console.log('Listen on 3000.')
