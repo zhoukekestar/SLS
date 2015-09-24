@@ -86,7 +86,7 @@
                   <%=item.name%>
                 </td>
                 <td>
-                  <%=item.msg%>
+                  <pre><%=item.msg.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").trim()%></pre>
                 </td>
                 <td>
                   <%=format(item._time)%>
