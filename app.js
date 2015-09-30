@@ -21,6 +21,16 @@ app.get("/", function(req, res){
 	res.redirect("/index.html");
 });
 
+// Can be access by ajax
+app.options('/MongoDB/search', function(req, res) {
+  res.set({
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'origin, authorization, accept, content-type, x-requested-with',
+    'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS'
+  });
+  res.end();
+})
+
 // search logs
 app.post('/MongoDB/search', function(req, res) {
 
@@ -59,6 +69,11 @@ app.post('/MongoDB/search', function(req, res) {
   }
 
   mongo.select('logs', opt, function(err, docs) {
+    res.set({
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'origin, authorization, accept, content-type, x-requested-with',
+      'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS'
+    });
     res.json({results: docs});
   })
 

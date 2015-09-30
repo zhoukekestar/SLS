@@ -207,14 +207,7 @@
      *
      */
     var xmlHttp = new XMLHttpRequest();
-    /**
-     * Add session header for cross-domain request.
-     * You can't set cookies for ajax
-     * and you have to response #options request# like:
-     * "Access-Control-Allow-Headers: X-AVOSCloud-Session-Token"
-     * before you send it.
-     * */
-    var session = document.cookie.match(/sessionToken=([^;]*)(;|$)/);
+
     action = (action === undefined ? self.getAttribute('action') : action);
 
     if (method === 'GET') {
@@ -223,9 +216,7 @@
 
     xmlHttp.open(method, action, true);
     xmlHttp.setRequestHeader('Content-Type', 'application/json');
-    if (session) {
-      xmlHttp.setRequestHeader('X-AVOSCloud-Session-Token', session[1])
-    }
+
     xmlHttp.responseType = 'json';
     xmlHttp.onreadystatechange = function() {
       if (xmlHttp.readyState === 4) {

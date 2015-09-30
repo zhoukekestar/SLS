@@ -77,7 +77,7 @@
         </tr>
         <thead>
           <tbody>
-            <% results.forEach(function(item) { %>
+            <% results.forEach(function(item) {  try { %>
               <tr>
                 <td>
                   <%=item.level%>
@@ -86,13 +86,13 @@
                   <%=item.name%>
                 </td>
                 <td>
-                  <pre><%=item.msg.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").trim()%></pre>
+                  <pre><%=item.msg && item.msg.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").trim()%></pre>
                 </td>
                 <td>
                   <%=format(item._time)%>
                 </td>
               </tr>
-              <% }) %>
+              <% } catch(e){} }) %>
           </tbody>
     </table>
   </script>
