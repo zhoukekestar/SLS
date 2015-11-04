@@ -70,25 +70,25 @@
     <table>
       <thead>
         <tr>
-          <th>level</th>
-          <th>name</th>
-          <th>msg</th>
-          <th style="width: 85px;">time</th>
+          <th style='vnd.ms-excel.numberformat: @;'>level</th>
+          <th style='vnd.ms-excel.numberformat: @;'>name</th>
+          <th style='vnd.ms-excel.numberformat: @;'>msg</th>
+          <th style="width: 85px;vnd.ms-excel.numberformat: @;">time</th>
         </tr>
         <thead>
           <tbody>
             <% results.forEach(function(item) {  try { %>
               <tr>
-                <td>
+                <td style='vnd.ms-excel.numberformat: @;'>
                   <%=item.level%>
                 </td>
-                <td>
+                <td style='vnd.ms-excel.numberformat: @;'>
                   <%=item.name%>
                 </td>
-                <td>
+                <td style='vnd.ms-excel.numberformat: @;'>
                   <pre><%=item.msg && item.msg.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").trim()%></pre>
                 </td>
-                <td>
+                <td style='vnd.ms-excel.numberformat: @;'>
                   <%=format(item._time)%>
                 </td>
               </tr>
@@ -108,6 +108,13 @@
   document.querySelector('form').onended = function(d) {
     document.querySelector("#tmpl")._updateBy(d);
   }
+
+  /*
+  var eles = document.querySelectorAll('td')
+  for (var i = 0; i < eles.length; i++) {
+    eles[i].style['vnd.ms-excel.numberformat'] = '@'
+  }
+   */
   </script>
 </body>
 
